@@ -1,152 +1,95 @@
-📚 Bookstore API Automation Project
-Automated E2E testing for Bookstore APIs using TestNG, Rest Assured, and Java 17 with full CI/CD support and Allure reporting.
+# 📚 Bookstore API Automation Project
+Automated E2E testing for Bookstore APIs using Java 17, Rest Assured, and TestNG, complete with CI/CD integration and Allure reporting.
 
 🚀 Project Overview
-This repository automates the key API flows of a Bookstore service. It uses a Test-Driven Development (TDD) approach with TestNG + Rest Assured to enable scalable, CI-ready test suites.
+This repository automates critical API workflows of a Bookstore service using a Test-Driven Development (TDD) approach. Built with TestNG + Rest Assured, the framework supports scalable, maintainable, and CI-ready test suites.
 
-🧰 Stack in Use
-Area	Tool/Framework
-Language	Java 17
-API Testing	Rest Assured
-Test Runner	TestNG (Retry, Parallel, Listeners)
-Build Tool	Maven
-Reporting	Allure
-IDE	IntelliJ IDEA
+| Area        | Tool/Framework                                         |
+| ----------- | ------------------------------------------------------ |
+| Language    | Java 17                                                |
+| API Testing | Rest Assured                                           |
+| Test Runner | TestNG (Retry analyzer, Parallel execution, Listeners) |
+| Build Tool  | Maven                                                  |
+| Reporting   | Allure                                                 |
+| IDE         | IntelliJ IDEA                                          |
 
-🎯 Key API Endpoints Tested
-http
+| Method | Endpoint      | Description                |
+| ------ | ------------- | -------------------------- |
+| POST   | `/books`      | Add a new book             |
+| PUT    | `/books/{id}` | Update book information    |
+| GET    | `/books/{id}` | Retrieve book by ID        |
+| GET    | `/books`      | Retrieve all books         |
+| DELETE | `/books/{id}` | Delete a book by ID        |
 
-POST    /signup         → Register a new user  
-POST    /login          → Login & get authentication token  
-POST    /books          → Add a new book  
-PUT     /books/{id}     → Update book info  
-GET     /books/{id}     → Get book by ID  
-GET     /books          → Get list of all books  
-DELETE  /books/{id}     → Delete a book by ID  
+
+
 📋 Setup Guide
 🔧 Prerequisites
-Java 17 or later
+Java 17+
 
 Maven 3.6+
 
 IntelliJ IDEA (or any IDE with Maven support)
 
-🛠 Installation
-
 # Clone the repo
-git clone [https://github.com/Gowthaman-261191/book-store-api-automation.git](https://github.com/Gowtham-261191/book_store_api_automation.git)
+git clone https://github.com/Gowthaman-261191/book-store-api-automation.git
 cd book-store-api-automation
 
 # Build and test
 mvn clean test
-Environment config files available under /resources:
 
-application-STAGE.properties
+# 📊 Allure Report Integration
+Generate Allure Report: mvn allure:report
 
-application-QA.properties
+Serve Locally: allure serve target/allure-results
 
-You can set environment-specific base URL and ports here.
+# Benefits:
 
-✅ Test Execution
-Run all tests:
+📌 Test case categorization
 
-mvn test
-Switch environments using a profile or configuration override.
+📉 Trends and history
 
-📊 Allure Reports
-After execution:
-
-mvn allure:report
-Serve the report locally:
+❌ Differentiates product vs. test script failures
 
 
-allure serve target/allure-results
-Allure displays test categories, trends, and clear failure reasons (assertion vs server errors).
-
-🔄 CI/CD Workflow: Jenkins + Ngrok
-Jenkins Configuration
-Install plugins:
+# 🔄 CI/CD Workflow (Jenkins + Ngrok)
+## ✅ Jenkins Setup
+Install the following Jenkins plugins:
 
 Git
 
-GitHub Integration
+GitHub
 
-Maven
-
-Allure
+Maven Integration
 
 Pipeline
 
-Run Jenkins locally:
+Allure
 
-jenkins
-Use Ngrok to expose local server for GitHub webhook:
+# 🧪 Dev Repo Jenkinsfile
 
-ngrok http http://localhost:8080
-Copy the forwarded URL.
+pipeline {agent anystages {stage('Build Dev') {steps {echo 'Build or test dev code here'}}stage('Trigger QA Automation') {steps {build job: 'QA-Repo'}}}}
 
-Dev Repo Jenkinsfile
-groovy
+# 🧪 QA Repo Jenkinsfile
 
-pipeline {
-  agent any
-  stages {
-    stage('Build Dev') {
-      steps {
-        echo 'Build or test dev code here'
-      }
-    }
-    stage('Trigger QA Automation') {
-      steps {
-        build job: 'QA-Repo'
-      }
-    }
-  }
-}
-QA Repo Jenkinsfile
-groovy
-pipeline {
-  agent any
-  tools {
-    maven 'Maven 3.6.3'
-    allure 'Allure'
-  }
-  stages {
-    stage('Checkout') {
-      steps {
-        git url: '<gitUrl>', branch: '<BranchName>'
-      }
-    }
-    stage('Build and Test') {
-      steps {
-        sh 'mvn clean test'
-      }
-    }
-    stage('Generate Allure Report') {
-      steps {
-        sh 'mvn allure:report'
-      }
-    }
-  }
-  post {
-    always {
-      allure([
-        includeProperties: false,
-        results: [[path: 'target/allure-results']]
-      ])
-    }
-  }
-}
-🌐 Webhook Setup (GitHub → Jenkins)
-Go to GitHub > Repo > Settings > Webhooks
-Set the payload URL using the format:
+pipeline {agent anytools {maven 'Maven 3.6.3'allure 'Allure'}stages {stage('Checkout') {steps {git url: '<gitUrl>', branch: '<BranchName>'}}stage('Build and Test') {steps {sh 'mvn clean test'}}
+    stage('Generate Allure Report') {steps {sh 'mvn allure:report'}}}post {always {allure([includeProperties: false,results: [[path: 'target/allure-results']]])}}}
 
+# 🌐 GitHub Webhook Setup
+Go to GitHub > Your Repo > Settings > Webhooks
+
+Add a new webhook with the following payload URL format:
 https://<user>:<token>@<ngrok-url>/job/DevRepo/build
-✅ This triggers the Dev Job which in turn runs QA automation and generates an Allure Report.
 
-🧪 CI/CD Summary
-Trigger	Action
-Commit to Dev	Jenkins builds Dev project
-→ QA automation job is triggered
-→ Allure report is generated automatically
+✅ This triggers the Dev Jenkins job, which in turn executes QA automation and generates the Allure report.
+
+# 🔁 CI/CD Summary
+| Action        | Result                                   |
+| ------------- | ---------------------------------------- |
+| Commit to Dev | Jenkins builds Dev project               |
+|               | → Triggers QA automation job             |
+|               | → Allure report generated in QA pipeline |
+
+
+
 
