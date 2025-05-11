@@ -32,9 +32,7 @@ Maven 3.6+
 IntelliJ IDEA (or any IDE with Maven support)
 
 🛠 Installation
-bash
-Copy
-Edit
+
 # Clone the repo
 git clone [https://github.com/Gowthaman-261191/book-store-api-automation.git](https://github.com/Gowtham-261191/book_store_api_automation.git)
 cd book-store-api-automation
@@ -52,24 +50,16 @@ You can set environment-specific base URL and ports here.
 ✅ Test Execution
 Run all tests:
 
-bash
-Copy
-Edit
 mvn test
 Switch environments using a profile or configuration override.
 
 📊 Allure Reports
 After execution:
 
-bash
-Copy
-Edit
 mvn allure:report
 Serve the report locally:
 
-bash
-Copy
-Edit
+
 allure serve target/allure-results
 Allure displays test categories, trends, and clear failure reasons (assertion vs server errors).
 
@@ -89,22 +79,15 @@ Pipeline
 
 Run Jenkins locally:
 
-bash
-Copy
-Edit
 jenkins
 Use Ngrok to expose local server for GitHub webhook:
 
-bash
-Copy
-Edit
 ngrok http http://localhost:8080
 Copy the forwarded URL.
 
 Dev Repo Jenkinsfile
 groovy
-Copy
-Edit
+
 pipeline {
   agent any
   stages {
@@ -122,8 +105,6 @@ pipeline {
 }
 QA Repo Jenkinsfile
 groovy
-Copy
-Edit
 pipeline {
   agent any
   tools {
@@ -160,9 +141,6 @@ pipeline {
 Go to GitHub > Repo > Settings > Webhooks
 Set the payload URL using the format:
 
-text
-Copy
-Edit
 https://<user>:<token>@<ngrok-url>/job/DevRepo/build
 ✅ This triggers the Dev Job which in turn runs QA automation and generates an Allure Report.
 
